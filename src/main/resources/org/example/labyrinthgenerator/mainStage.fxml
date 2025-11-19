@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox fx:id="mainBox" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.labyrinthgenerator.primaryStageController">
+  <VBox fx:id="leftSideBar">
+    <Button fx:id="generateButton" onAction="#handleGenerate" styleClass="side-button" text="Generate new maze" />
+    <Button fx:id="saveButton" onAction="#handleSave" styleClass="side-button" text="Save the maze" />
+  </VBox>
+  <Pane fx:id="mainPane"/>
+</HBox>
