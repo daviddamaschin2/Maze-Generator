@@ -11,6 +11,8 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 public class primaryStageController {
     @FXML
     private Label welcomeText;
@@ -47,6 +49,16 @@ public class primaryStageController {
         boolean[][] walls_horizontal = new boolean[8][9];
         boolean[][] walls_vertical = new boolean[9][8];
 
+        //filling arrays with true
+        for (boolean[] booleans : walls_horizontal) {
+            Arrays.fill(booleans, true);
+        }
+        for (boolean[] booleans : walls_vertical) {
+            Arrays.fill(booleans, true);
+        }
+
+
+
         int startPos = (int) (Math.random() * 9);
         int endPos = (int) (Math.random() * 9);
 
@@ -66,15 +78,19 @@ public class primaryStageController {
                 switch(solvablePath[i]){
                     case NORTH -> {
                         y--;
+                        walls_horizontal[y][x] = false;
                     }
                     case SOUTH -> {
                         y++;
+                        walls_horizontal[y-1][x] = false;
                     }
                     case WEST -> {
                         x--;
+                        walls_vertical[y][x] = false;
                     }
                     case EAST -> {
                         x++;
+                        walls_vertical[y][x-1] = false;
                     }
                 }
                 Rectangle rect = new Rectangle();
@@ -104,6 +120,35 @@ public class primaryStageController {
         endRect.setFill(Color.BLACK);
         mainPane.getChildren().add(endRect);
 
+        //drawing horizontal walls
+        for(int y = 0; y < walls_horizontal.length; y++){
+            for(int x = 0; x < walls_horizontal[y].length; x++){
+                Line line = new Line();
+                line.setStartX(x*50+OFFSET);
+                line.setEndX((x+1)*50+OFFSET);
+                line.setStartY((y+1)*50+OFFSET);
+                line.setEndY((y+1)*50+OFFSET);
+                line.setStroke(Color.BLACK);
+                line.setStrokeWidth(2);
+                if(walls_horizontal[y][x])mainPane.getChildren().add(line);
+            }
+        }
+
+        //drawing vertical walls
+        for(int y = 0; y < walls_vertical.length; y++){
+            for(int x = 0; x < walls_vertical[y].length; x++){
+                Line line = new Line();
+                line.setStartX((x+1)*50+OFFSET);
+                line.setEndX((x+1)*50+OFFSET);
+                line.setStartY(y*50+OFFSET);
+                line.setEndY((y+1)*50+OFFSET);
+                line.setStroke(Color.BLACK);
+                line.setStrokeWidth(2);
+                if(walls_vertical[y][x])mainPane.getChildren().add(line);
+            }
+        }
+
+        //draw horizontal edges
         for(int x = 0;  x < 9; x++){
             Line line = new Line();
             line.setStartX(x*50+OFFSET);
@@ -112,7 +157,7 @@ public class primaryStageController {
             line.setEndY(OFFSET);
             line.setStroke(Color.BLACK);
             line.setStrokeWidth(2);
-            mainPane.getChildren().add(line);
+            if(x != endPos)mainPane.getChildren().add(line);
 
             Line line2 = new Line();
             line2.setStartX(x*50+ OFFSET);
@@ -121,9 +166,10 @@ public class primaryStageController {
             line2.setEndY(9 * 50 + OFFSET);
             line2.setStroke(Color.BLACK);
             line2.setStrokeWidth(2);
-            mainPane.getChildren().add(line2);
+            if(x != startPos)mainPane.getChildren().add(line2);
         }
 
+        //draw vertical edges
         for(int y = 0;  y < 9; y++){
             Line line = new Line();
             line.setStartX(OFFSET);
