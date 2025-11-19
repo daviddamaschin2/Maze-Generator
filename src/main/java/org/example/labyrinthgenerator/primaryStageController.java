@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
@@ -51,108 +52,79 @@ public class primaryStageController {
 
         final int OFFSET = 10;
 
-        for (int i = 0; i < walls_horizontal.length; i++) {
-            for (int j = 0; j < walls_horizontal[i].length; j++) {
-                walls_horizontal[i][j] = Math.random() < 0.5;
-            }
-        }
-
-        for (int i = 0; i < walls_vertical.length; i++) {
-            for (int j = 0; j < walls_vertical[i].length; j++) {
-                walls_vertical[i][j] = Math.random() < 0.5;
-            }
-        }
-
         PathGenerator generator = new PathGenerator(9, 9, startPos, endPos);
-        generator.generateNewPath();
-        PathGenerator.Direction[] path = generator.getGeneratedPath();
+        generator.generatePath();
+        PathGenerator.Direction[] solvablePath = generator.getPath();
 
-        int x = startPos;
-        int y = 8;
+        if(solvablePath == null){
+            System.out.println("Null Path");
+        }
+        else{
+            int x = startPos;
+            int y = 8;
+            for(int i = 0; i < solvablePath.length; i++){
+                switch(solvablePath[i]){
+                    case NORTH -> {
+                        y--;
+                    }
+                    case SOUTH -> {
+                        y++;
+                    }
+                    case WEST -> {
+                        x--;
+                    }
+                    case EAST -> {
+                        x++;
+                    }
+                }
+                Rectangle rect = new Rectangle();
+                rect.setFill(Color.RED);
+                rect.setX(x*50+OFFSET+10);
+                rect.setY(y*50+OFFSET+10);
+                rect.setWidth(30);
+                rect.setHeight(30);
 
-        // draw start pos
+                mainPane.getChildren().add(rect);
+            }
+        }
+
         Rectangle startRect = new Rectangle();
-        startRect.setX(x * 50 + OFFSET + 10);
-        startRect.setY(y * 50 + OFFSET + 10);
+        startRect.setX(startPos*50+OFFSET+10);
+        startRect.setY(8*50+OFFSET+10);
         startRect.setWidth(30);
         startRect.setHeight(30);
         startRect.setFill(Color.GREEN);
         mainPane.getChildren().add(startRect);
 
-        //draw end pos
         Rectangle endRect = new Rectangle();
-        endRect.setX(endPos * 50 + OFFSET + 10);
-        endRect.setY(OFFSET + 10);
+        endRect.setX(endPos*50+OFFSET+10);
+        endRect.setY(OFFSET+10);
         endRect.setWidth(30);
         endRect.setHeight(30);
-        endRect.setFill(Color.BLUE);
+        endRect.setFill(Color.BLACK);
         mainPane.getChildren().add(endRect);
 
-        // Folge dem Pfad
-        for(PathGenerator.Direction dir : path){
-            switch (dir){
-                case SOUTH -> {
-                    if(y < 7){
-                        walls_horizontal[y][x] = false;
-                        y++;
-                    }
-                }
-                case NORTH -> {
-                    if(y > 0){
-                        walls_horizontal[y-1][x] = false;
-                        y--;
-                    }
-                }
-                case EAST -> {
-                    if(x < 7){
-                        walls_vertical[y][x] = false;
-                        x++;
-                    }
-                }
-                case WEST -> {
-                    if(x > 1){
-                        walls_vertical[y][x-1] = false;
-                        x--;
-                    }
-                }
-            }
+        for(int x = 0;  x < 9; x++){
+            Line line = new Line();
+            line.setStartX(x*50+OFFSET);
+            line.setStartY(OFFSET);
+            line.setEndX((x+1)*50+OFFSET);
+            line.setEndY(OFFSET);
+            line.setStroke(Color.BLACK);
+            line.setStrokeWidth(2);
+            mainPane.getChildren().add(line);
 
-            // Zeichne Feld nach Bewegung
-            Rectangle rect = new Rectangle();
-            rect.setX(x * 50 + OFFSET + 10);
-            rect.setY(y * 50 + OFFSET + 10);
-            rect.setWidth(30);
-            rect.setHeight(30);
-            rect.setFill(Color.RED);
-            mainPane.getChildren().add(rect);
+            Line line2 = new Line();
+            line2.setStartX(x*50+ OFFSET);
+            line2.setStartY(9 * 50 + OFFSET);
+            line2.setEndX((x+1)*50 + OFFSET);
+            line2.setEndY(9 * 50 + OFFSET);
+            line2.setStroke(Color.BLACK);
+            line2.setStrokeWidth(2);
+            mainPane.getChildren().add(line2);
         }
 
-        for (y = 0; y < 8; y++) {
-            for (x = 0; x < 8; x++) {
-                if (walls_horizontal[y][x]) {
-                    Line line = new Line();
-                    line.setStartX((x+1) * 50 + OFFSET);
-                    line.setStartY((y+1) * 50 + OFFSET);
-                    line.setEndX((x + 2) * 50 + OFFSET);
-                    line.setEndY((y+1) * 50 + OFFSET);
-                    line.setStroke(Color.BLACK);
-                    line.setStrokeWidth(1);
-                    mainPane.getChildren().add(line);
-                }
-                if (walls_vertical[y][x]) {
-                    Line line = new Line();
-                    line.setStartX((x+1) * 50+OFFSET);
-                    line.setStartY((y+1) * 50+OFFSET);
-                    line.setEndX((x+1) * 50+OFFSET);
-                    line.setEndY((y + 2) * 50+OFFSET);
-                    line.setStroke(Color.BLACK);
-                    line.setStrokeWidth(1);
-                    mainPane.getChildren().add(line);
-                }
-            }
-        }
-
-        for(y = 0;  y < 9; y++){
+        for(int y = 0;  y < 9; y++){
             Line line = new Line();
             line.setStartX(OFFSET);
             line.setStartY((y) * 50 + OFFSET);
