@@ -168,10 +168,10 @@ public class MazeGenerator {
             return;
         }
         List<PathGenerator.Direction> list = new ArrayList<>();
-        if (posX > 0) list.add(PathGenerator.Direction.WEST);
-        if (posX < fieldWidth - 1) list.add(PathGenerator.Direction.EAST);
-        if (posY > 0) list.add(PathGenerator.Direction.NORTH);
-        if (posY < fieldHeight - 1) list.add(PathGenerator.Direction.SOUTH);
+        if (posX > 0 && vertical_walls[posY][posX-1] && !visited[posY][posX-1]) list.add(PathGenerator.Direction.WEST);
+        if (posX < fieldWidth - 1 && vertical_walls[posY][posX] && !visited[posY][posX+1]) list.add(PathGenerator.Direction.EAST);
+        if (posY > 0 && horizontal_walls[posY-1][posX] && !visited[posY-1][posX]) list.add(PathGenerator.Direction.NORTH);
+        if (posY < fieldHeight - 1 && horizontal_walls[posY][posX] && !visited[posY+1][posX]) list.add(PathGenerator.Direction.SOUTH);
 
         PathGenerator.Direction[] possibleDirections = list.toArray(new PathGenerator.Direction[0]);
         shuffleDirectionArray(possibleDirections);
@@ -185,32 +185,28 @@ public class MazeGenerator {
             switch (dir){
                 case NORTH -> {
                     newY--;
-                    if(!wouldCreateLargeSpace(newX, newY)) {
-                        horizontal_walls[newY][newX] = false;
-                    }
+                    horizontal_walls[newY][newX] = false;
                 }
                 case SOUTH -> {
                     newY++;
-                    if(!wouldCreateLargeSpace(newX, newY)) {
-                        horizontal_walls[newY - 1][newX] = false;
-                    }
+                    horizontal_walls[newY - 1][newX] = false;
                 }
                 case WEST -> {
                     newX--;
-                    if(!wouldCreateLargeSpace(newX, newY)) {
-                        vertical_walls[newY][newX] = false;
-                    }
+                    vertical_walls[newY][newX] = false;
                 }
                 case EAST -> {
                     newX++;
-                    if(!wouldCreateLargeSpace(newX, newY)) {
-                        vertical_walls[newY][newX - 1] = false;
-                    }
+                    vertical_walls[newY][newX - 1] = false;
                 }
             }
 
-            if(connectedToRestOfMaze(newX, newY, dir)){
-                return; // Stop once connected
+            if(connectedToRestOfMaze(newX, newY, null)){
+                return;
+            }
+            else{
+                createRandomConnection(newX, newY);
+                return;
             }
         }
     }
