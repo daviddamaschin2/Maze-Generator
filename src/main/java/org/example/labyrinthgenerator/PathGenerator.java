@@ -86,7 +86,7 @@ public class PathGenerator {
         return false;
     }
 
-    private void shuffleArray(Direction[] dirs){
+    public static void shuffleArray(Direction[] dirs){
         List<Direction> directions = new ArrayList<Direction>();
         directions.add(Direction.NORTH);
         directions.add(Direction.SOUTH);

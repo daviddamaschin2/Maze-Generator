@@ -64,45 +64,17 @@ public class primaryStageController {
 
         final int OFFSET = 10;
 
-        PathGenerator generator = new PathGenerator(9, 9, startPos, endPos);
-        generator.generatePath();
-        PathGenerator.Direction[] solvablePath = generator.getPath();
+        PathGenerator pathGenerator = new PathGenerator(9, 9, startPos, endPos);
+        pathGenerator.generatePath();
+        PathGenerator.Direction[] solvablePath = pathGenerator.getPath();
 
-        if(solvablePath == null){
-            System.out.println("Null Path");
-        }
-        else{
-            int x = startPos;
-            int y = 8;
-            for(int i = 0; i < solvablePath.length; i++){
-                switch(solvablePath[i]){
-                    case NORTH -> {
-                        y--;
-                        walls_horizontal[y][x] = false;
-                    }
-                    case SOUTH -> {
-                        y++;
-                        walls_horizontal[y-1][x] = false;
-                    }
-                    case WEST -> {
-                        x--;
-                        walls_vertical[y][x] = false;
-                    }
-                    case EAST -> {
-                        x++;
-                        walls_vertical[y][x-1] = false;
-                    }
-                }
-                Rectangle rect = new Rectangle();
-                rect.setFill(Color.RED);
-                rect.setX(x*50+OFFSET+10);
-                rect.setY(y*50+OFFSET+10);
-                rect.setWidth(30);
-                rect.setHeight(30);
+        MazeGenerator generator = new MazeGenerator(9, 9, solvablePath, startPos, endPos);
+        generator.generateMaze();
 
-                mainPane.getChildren().add(rect);
-            }
-        }
+        walls_horizontal = generator.getHorizontal_walls();
+        walls_vertical = generator.getVertical_walls();
+
+
 
         Rectangle startRect = new Rectangle();
         startRect.setX(startPos*50+OFFSET+10);
