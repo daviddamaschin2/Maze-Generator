@@ -32,6 +32,9 @@ public class primaryStageController {
 
     private Stage primaryStage;
 
+    private int fieldHeight = 12;
+    private int fieldWidth = 12;
+
     @FXML
     private void initialize() {
 
@@ -46,8 +49,8 @@ public class primaryStageController {
     private void  handleGenerate() {
         clear();
         System.out.println("Generating");
-        boolean[][] walls_horizontal = new boolean[8][9];
-        boolean[][] walls_vertical = new boolean[9][8];
+        boolean[][] walls_horizontal = new boolean[fieldHeight-1][fieldWidth];
+        boolean[][] walls_vertical = new boolean[fieldHeight][fieldWidth-1];
 
         //filling arrays with true
         for (boolean[] booleans : walls_horizontal) {
@@ -59,16 +62,16 @@ public class primaryStageController {
 
 
 
-        int startPos = (int) (Math.random() * 9);
-        int endPos = (int) (Math.random() * 9);
+        int startPos = (int) (Math.random() * fieldWidth);
+        int endPos = (int) (Math.random() * fieldWidth);
 
         final int OFFSET = 10;
 
-        PathGenerator pathGenerator = new PathGenerator(9, 9, startPos, endPos);
+        PathGenerator pathGenerator = new PathGenerator(fieldHeight, fieldWidth, startPos, endPos);
         pathGenerator.generatePath();
         PathGenerator.Direction[] solvablePath = pathGenerator.getPath();
 
-        MazeGenerator generator = new MazeGenerator(9, 9, solvablePath, startPos, endPos);
+        MazeGenerator generator = new MazeGenerator(fieldHeight, fieldWidth, solvablePath, startPos, endPos);
         generator.generateMaze();
 
         walls_horizontal = generator.getHorizontal_walls();
@@ -78,7 +81,7 @@ public class primaryStageController {
 
         Rectangle startRect = new Rectangle();
         startRect.setX(startPos*50+OFFSET+10);
-        startRect.setY(8*50+OFFSET+10);
+        startRect.setY((fieldHeight-1)*50+OFFSET+10);
         startRect.setWidth(30);
         startRect.setHeight(30);
         startRect.setFill(Color.GREEN);
@@ -121,7 +124,7 @@ public class primaryStageController {
         }
 
         //draw horizontal edges
-        for(int x = 0;  x < 9; x++){
+        for(int x = 0;  x < fieldWidth; x++){
             Line line = new Line();
             line.setStartX(x*50+OFFSET);
             line.setStartY(OFFSET);
@@ -133,16 +136,16 @@ public class primaryStageController {
 
             Line line2 = new Line();
             line2.setStartX(x*50+ OFFSET);
-            line2.setStartY(9 * 50 + OFFSET);
+            line2.setStartY(fieldHeight * 50 + OFFSET);
             line2.setEndX((x+1)*50 + OFFSET);
-            line2.setEndY(9 * 50 + OFFSET);
+            line2.setEndY(fieldHeight * 50 + OFFSET);
             line2.setStroke(Color.BLACK);
             line2.setStrokeWidth(2);
             if(x != startPos)mainPane.getChildren().add(line2);
         }
 
         //draw vertical edges
-        for(int y = 0;  y < 9; y++){
+        for(int y = 0;  y < fieldHeight; y++){
             Line line = new Line();
             line.setStartX(OFFSET);
             line.setStartY((y) * 50 + OFFSET);
@@ -153,9 +156,9 @@ public class primaryStageController {
             mainPane.getChildren().add(line);
 
             Line line2 = new Line();
-            line2.setStartX(9*50 + OFFSET);
+            line2.setStartX(fieldWidth*50 + OFFSET);
             line2.setStartY((y) * 50 + OFFSET);
-            line2.setEndX(9*50 + OFFSET);
+            line2.setEndX(fieldWidth*50 + OFFSET);
             line2.setEndY((y+1) * 50 + OFFSET);
             line2.setStroke(Color.BLACK);
             line2.setStrokeWidth(2);

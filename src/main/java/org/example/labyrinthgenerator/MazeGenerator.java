@@ -94,7 +94,7 @@ public class MazeGenerator {
             return false;
         }
 
-        if(xPos == startPos && yPos == fieldHeight-1 || xPos == endPos && yPos == 0 || visitedBySolution[yPos][xPos]){
+        if(xPos == startPos && yPos == fieldHeight-1 ||visitedBySolution[yPos][xPos]){
             return true;
         }
 
@@ -168,9 +168,9 @@ public class MazeGenerator {
             return;
         }
         List<PathGenerator.Direction> list = new ArrayList<>();
-        if (posX > 0 && vertical_walls[posY][posX-1] && !visited[posY][posX-1]) list.add(PathGenerator.Direction.WEST);
-        if (posX < fieldWidth - 1 && vertical_walls[posY][posX] && !visited[posY][posX+1]) list.add(PathGenerator.Direction.EAST);
-        if (posY > 0 && horizontal_walls[posY-1][posX] && !visited[posY-1][posX]) list.add(PathGenerator.Direction.NORTH);
+        if (posX > 0 && vertical_walls[posY][posX-1] && !visited[posY][posX-1] && !(posY == 0 && posX-1 == endPos)) list.add(PathGenerator.Direction.WEST);
+        if (posX < fieldWidth - 1 && vertical_walls[posY][posX] && !visited[posY][posX+1] && !(posY == 0 && posX+1 == endPos)) list.add(PathGenerator.Direction.EAST);
+        if (posY > 0 && horizontal_walls[posY-1][posX] && !visited[posY-1][posX] && !(posY-1 == 0 && posX == endPos)) list.add(PathGenerator.Direction.NORTH);
         if (posY < fieldHeight - 1 && horizontal_walls[posY][posX] && !visited[posY+1][posX]) list.add(PathGenerator.Direction.SOUTH);
 
         PathGenerator.Direction[] possibleDirections = list.toArray(new PathGenerator.Direction[0]);
