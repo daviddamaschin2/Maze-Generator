@@ -117,6 +117,7 @@ public class MazeGenerator {
                     if(yPos > 0 && origin != PathGenerator.Direction.SOUTH){
                         if(!horizontal_walls[yPos-1][xPos]){
                             if(connectedToRestOfMaze( xPos, yPos-1, PathGenerator.Direction.NORTH)){
+                                visitedBySolution[yPos][xPos] = true;
                                 return true;
                             }
                         }
@@ -126,6 +127,7 @@ public class MazeGenerator {
                     if(yPos < fieldHeight-1 && origin != PathGenerator.Direction.NORTH){
                         if(!horizontal_walls[yPos][xPos]){
                             if(connectedToRestOfMaze(xPos, yPos+1, PathGenerator.Direction.SOUTH)){
+                                visitedBySolution[yPos][xPos] = true;
                                 return true;
                             }
                         }
@@ -135,6 +137,7 @@ public class MazeGenerator {
                     if(xPos < fieldWidth-1 && origin != PathGenerator.Direction.WEST){
                         if(!vertical_walls[yPos][xPos]){
                             if(connectedToRestOfMaze(xPos+1, yPos, PathGenerator.Direction.EAST)){
+                                visitedBySolution[yPos][xPos] = true;
                                 return true;
                             }
                         }
@@ -144,6 +147,7 @@ public class MazeGenerator {
                     if(xPos > 0 && origin != PathGenerator.Direction.EAST){
                         if(!vertical_walls[yPos][xPos-1]){
                             if(connectedToRestOfMaze(xPos-1, yPos, PathGenerator.Direction.WEST)){
+                                visitedBySolution[yPos][xPos] = true;
                                 return true;
                             }
                         }
