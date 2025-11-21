@@ -29,6 +29,7 @@ public class PathGenerator {
     public void generatePath(){
         finalPath.clear();
         int attempts = 100;
+        int maxDepth = fieldHeight*fieldWidth;
         boolean solutionFound = false;
 
         //finding a possible path
@@ -36,24 +37,36 @@ public class PathGenerator {
             List<Direction> path = new ArrayList<Direction>();
             boolean[][] visited = new boolean[fieldHeight][fieldWidth];
 
-            visited[startX][fieldHeight-1] = true;
+            System.out.println("Attempt " + (i+1));
 
-            if(createRecursivePath(startX, fieldHeight - 1, path, visited)){
+            visited[fieldHeight-1][startX] = true;
+
+            if(createRecursivePath(startX, fieldHeight - 1, path, visited, 0, maxDepth)){
                 solutionFound = true;
                 finalPath = path;
+                System.out.println("Solution found!"); // Add this
             }
         }
 
         //returning the path if it has been found
-        if(!solutionFound) finalPath = null;
+        if(!solutionFound){
+            System.out.println("No solution found after " + attempts + " attempts");
+            finalPath = null;
+        }
     }
 
-    private boolean createRecursivePath(int currentX, int currentY, List<Direction> path, boolean visited[][]){
+    private boolean createRecursivePath(int currentX, int currentY, List<Direction> path, boolean visited[][], int depth, int maxDepth){
         if(currentY == 0 && currentX == endX){
             return true;
         }
+        else if(depth >= maxDepth){
+            return false;
+        }
         Direction[] directions = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST};
         shuffleArray(directions);
+
+        int backtrackCount = 0;
+        int maxBacktracks = 3;
 
         for(Direction dir : directions){
             int nextX = currentX;
@@ -67,47 +80,35 @@ public class PathGenerator {
             }
 
             // Check bounds and visited status
-            if(nextX >= 0 && nextX < fieldWidth &&
-                    nextY >= 0 && nextY < fieldHeight &&
-                    !visited[nextY][nextX]){
+            if(nextX >= 0 && nextX < fieldWidth && nextY >= 0 && nextY < fieldHeight && !visited[nextY][nextX]){
 
                 path.add(dir);
                 visited[nextY][nextX] = true;
 
-                if(createRecursivePath(nextX, nextY, path, visited)){
+                if(createRecursivePath(nextX, nextY, path, visited, depth+1, maxDepth)){
                     return true;
                 }
 
                 // Backtrack
                 path.removeLast();
                 visited[nextY][nextX] = false;
+                backtrackCount++;
+
+                if(backtrackCount >= maxBacktracks){
+                    return false;
+                }
             }
         }
         return false;
     }
 
-    public static void shuffleArray(Direction[] dirs){
-        List<Direction> directions = new ArrayList<Direction>();
-        directions.add(Direction.NORTH);
-        directions.add(Direction.SOUTH);
-        directions.add(Direction.WEST);
-        directions.add(Direction.EAST);
-
-        int randomDir = (int)(Math.random()*4);
-        dirs[0] = directions.get(randomDir);
-        directions.remove(randomDir);
-
-        randomDir = (int)(Math.random()*3);
-        dirs[1] = directions.get(randomDir);
-        directions.remove(randomDir);
-
-        randomDir = (int)(Math.random()*2);
-        dirs[2] = directions.get(randomDir);
-        directions.remove(randomDir);
-
-        randomDir = (int)(Math.random()*1);
-        dirs[3] = directions.get(randomDir);
-        directions.remove(randomDir);
+    private void shuffleArray(PathGenerator.Direction[] dirs) {
+        for (int i = dirs.length - 1; i > 0; i--) {
+            int j = (int)(Math.random() * (i + 1));
+            PathGenerator.Direction tmp = dirs[i];
+            dirs[i] = dirs[j];
+            dirs[j] = tmp;
+        }
     }
 
     public Direction[] getPath(){

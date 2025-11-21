@@ -108,8 +108,7 @@ public class MazeGenerator {
         walkableDirections[2] = PathGenerator.Direction.EAST;
         walkableDirections[3] = PathGenerator.Direction.WEST;
 
-        //was too lazy to write another shuffle array method or to move the current one
-        PathGenerator.shuffleArray(walkableDirections);
+        shuffleDirectionArray(walkableDirections);
 
         for(int i = 0; i < walkableDirections.length; i++){
             switch(walkableDirections[i]){

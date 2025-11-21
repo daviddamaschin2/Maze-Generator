@@ -4,9 +4,11 @@
 <?import javafx.scene.layout.*?>
 
 <HBox fx:id="mainBox" stylesheets="@style/style.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.labyrinthgenerator.primaryStageController">
-  <VBox fx:id="leftSideBar">
+  <VBox fx:id="leftSideBar" spacing="8" fillWidth="true">
+    <TextField fx:id="fieldWidthInput"  promptText="Enter field Width" styleClass="text-field"/>
+    <TextField fx:id="fieldHeightInput"  promptText="Enter field Height" styleClass="text-field"/>
     <Button fx:id="generateButton" onAction="#handleGenerate" styleClass="side-button" text="Generate new maze" />
     <Button fx:id="saveButton" onAction="#handleSave" styleClass="side-button" text="Save the maze" />
   </VBox>
-  <Pane fx:id="mainPane"/>
+  <Pane fx:id="mainPane" HBox.hgrow="ALWAYS"/>
 </HBox>

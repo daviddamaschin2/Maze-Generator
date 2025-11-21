@@ -1,9 +1,35 @@
 .sideBar_bg{
-    -fx-background-color: #1C1C1C;
+    -fx-background-color: rgba(45, 20, 44, 1);
+    -fx-background-radius: 0 12 12 0;   /* top-left, top-right, bottom-right, bottom-left */
+        -fx-border-radius: 0 12 12 0;
+        -fx-background-insets: 0;
+        -fx-border-insets: 0;
+        -fx-padding: 10;
+
+        -fx-effect: dropshadow(gaussian, rgba(45, 20, 44 ,0.35), 12, 0.25, 4, 0);
 }
 
-.mainPane_bg{
-    -fx-background-color:aaaaaa;
+.hBox_bg{
+    -fx-background-color: linear-gradient(to bottom right, #EE4540, #801336);
+}
+
+.maze_wall{
+    -fx-stroke: rgba(255, 255, 255, 1);
+    -fx-stroke-width: 2;
+    -fx-arc-width: 30;
+    -fx-arc-height: 30;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.35), 12, 0.25, 2, 0);
+}
+
+.text-field{
+    -fx-background-color: rgba(0, 0, 0, 0);
+    -fx-text-fill: #FFFFFF;
+    -fx-prompt-text-fill: #FFFFFF;
+    -fx-border-color: #FFFFFF;
+    -fx-border-width: 1;
+    -fx-border-radius: 20;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.35), 12, 0.25, 2, 0),
+                    innershadow(gaussian, rgba(0,0,0,0.15), 4, 0.3, 0, 1);
 }
 
 .side-button{
@@ -13,8 +39,17 @@
     -fx-border-color: rgba(255,255,255,0.7);
     -fx-border-width: 1;
     -fx-border-radius: 20;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 12, 0.3, 0, 3),
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.35), 12, 0.25, 2, 0),
                 innershadow(gaussian, rgba(0,0,0,0.15), 4, 0.3, 0, 1);
     -fx-cursor: hand;
 }
+
+.side-button:hover {
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.55), 12, 0.35, 2, 0),
+                innershadow(gaussian, rgba(0,0,0,0.25), 4, 0.3, 0, 1);
+    -fx-cursor: hand;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
 
